@@ -1,16 +1,27 @@
-from rest_framework.generics import ListCreateAPIView, GenericAPIView
+from rest_framework import status
+from rest_framework.generics import CreateAPIView, ListAPIView
 
 from django.http import HttpResponse
+
+from posts.models import Post
 
 from photos.serializers import PhotoSerializer
 from photos.models import Photo
 
-from photos.tasks import debug_task
+from photos.tasks import upload_photo_to_s3
 
-class PhotoListView(ListCreateAPIView):
+
+class PhotoUploadView(CreateAPIView):
+    def create(self, request):
+        p = Post.objects.get(pk=1)
+        request.data["post"] = p.pk
+        serializer = PhotoSerializer(data=request.data)
+        serializer.is_valid(True)
+        serializer.save()
+        # upload_photo_to_s3.delay()
+        return HttpResponse(status=status.HTTP_201_CREATED)
+
+
+class PhotoListView(ListAPIView):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
-
-def celery(request):
-    debug_task.delay()
-    return HttpResponse("FINISHED")

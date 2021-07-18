@@ -1,4 +1,7 @@
+boto3==1.17
 celery==5.1.2
 django==3.2.5
+django-cors-headers==3.7.0
 djangorestframework==3.12.4
+djangorestframework-simplejwt==4.7.2
 psycopg2==2.9.1

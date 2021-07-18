@@ -1,8 +1,8 @@
 from django.urls import path
 
-from photos.views import PhotoListView, celery
+from photos.views import PhotoUploadView, PhotoListView
 
 urlpatterns = [
-    path("", PhotoListView.as_view(),name="photos_list"),
-    path("lol/", celery)
+    path("upload/", PhotoUploadView.as_view(), name="photo_upload"),
+    path("list/", PhotoListView.as_view(), name="photo_list"),
 ]
