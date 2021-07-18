@@ -1,5 +1,6 @@
 from posts.models import Post
 from photos.models import Photo
+from photos.tasks import upload_photo_to_s3
 
 from users.serializers import UserSerializer
 from photos.serializers import PhotoSerializer
@@ -24,10 +25,9 @@ class PostCreateSerializer(serializers.ModelSerializer):
         photos = validated_data.pop("photos")
         instance = Post.objects.create(**validated_data)
         for photo in photos:
-            photo["post"] = instance.pk
-            serializer = PhotoSerializer(data=photo)
-            serializer.is_valid(True)
-            serializer.save()
+            photo["post"] = instance
+            new_photo = Photo.objects.create(**photo)
+            upload_photo_to_s3.delay(new_photo.pk)
         return instance
 
 

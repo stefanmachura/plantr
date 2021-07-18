@@ -15,3 +15,4 @@ class PhotoSerializer(serializers.ModelSerializer):
             "post",
             "alt_text",
         ]
+        read_only_fields = ["s3_url"]

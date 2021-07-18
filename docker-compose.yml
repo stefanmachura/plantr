@@ -31,33 +31,33 @@ services:
             - POSTGRES_USER=user
             - POSTGRES_PASSWORD=pass
             - POSTGRES_DB=db
-    # rabbit:
-    #     container_name: rabbitmq
-    #     hostname: rabbit
-    #     image: rabbitmq:3
-    #     ports: 
-    #         - "5672:5672"
-    # celery:
-    #     build: 
-    #         context: ./backend
-    #         dockerfile: ../files/backend.Dockerfile
-    #     command: celery -A backend worker -l INFO
-    #     volumes: 
-    #         - ./backend:/opt/app
-    #     env_file: 
-    #         - ./files/.env.dev
-    #         - ./files/.secret
-    #     depends_on: 
-    #         - rabbit
-    #     links:
-    #         - rabbit
-    # flower:  
-    #     image: mher/flower
-    #     environment:
-    #         - CELERY_BROKER_URL=amqp://rabbitmq//
-    #         - FLOWER_PORT=8888
-    #     ports:  
-    #         - 8888:8888
+    rabbit:
+        container_name: rabbitmq
+        hostname: rabbit
+        image: rabbitmq:3
+        ports: 
+            - "5672:5672"
+    celery:
+        build: 
+            context: ./backend
+            dockerfile: ../files/backend.Dockerfile
+        command: celery -A backend worker -l INFO
+        volumes: 
+            - ./backend:/opt/app
+        env_file: 
+            - ./files/.env.dev
+            - ./files/.secret
+        depends_on: 
+            - rabbit
+        links:
+            - rabbit
+    flower:  
+        image: mher/flower
+        environment:
+            - CELERY_BROKER_URL=amqp://rabbitmq//
+            - FLOWER_PORT=8888
+        ports:  
+            - 8888:8888
       
 volumes:
     postgres_data:
