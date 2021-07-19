@@ -12,7 +12,8 @@ from photos.tasks import upload_photo_to_s3
 
 
 class PhotoUploadView(CreateAPIView):
-    """ not needed for now, to be refactored"""
+    """not needed for now, to be refactored"""
+
     def create(self, request):
         p = Post.objects.get(pk=1)
         request.data["post"] = p.pk

@@ -12,6 +12,7 @@ services:
             - 3000:3000
         
     backend:
+        container_name: backend
         build: 
             context: ./backend
             dockerfile: ../files/backend.Dockerfile
